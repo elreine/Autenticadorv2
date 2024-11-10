@@ -22,7 +22,7 @@ if "RENDER" in os.environ:
     cred = credentials.Certificate("/etc/secrets/firebase_key.json")
 else:
     # Si está ejecutándose localmente, usa la ruta local
-    cred = credentials.Certificate("firebase_key.json")
+    cred = credentials.Certificate("backend/firebase_key.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -86,4 +86,4 @@ def get_users():
         return jsonify({"error": "Hubo un problema al obtener la lista de usuarios"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
