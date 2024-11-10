@@ -1,0 +1,5 @@
+firebase-admin
+flask
+flask-bcrypt
+flask-cors
+itsdangerous
