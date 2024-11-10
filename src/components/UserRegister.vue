@@ -28,7 +28,7 @@ export default {
   methods: {
     // Método para obtener el token CSRF
     fetchCsrfToken() {
-      fetch("http://127.0.0.1:5000/csrf-token")
+      fetch("https://autenticadorv2.onrender.com/csrf-token")
         .then(response => response.json())
         .then(data => {
           this.csrfToken = data.csrf_token;

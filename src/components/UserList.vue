@@ -16,7 +16,7 @@
     },
     mounted() {
       // Recuperar la lista de usuarios al cargar el componente
-      fetch("http://127.0.0.1:5000/users")
+      fetch("https://autenticadorv2.onrender.com/users")
         .then(response => response.json())
         .then(data => {
           this.users = data.users;
