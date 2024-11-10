@@ -9,7 +9,7 @@ from itsdangerous import URLSafeTimedSerializer
 
 # Configuración de Flask, Bcrypt y CORS
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://autenticadorv2-qcxr86mx9-reinels-projects-b1028227.vercel.app"])
 bcrypt = Bcrypt(app)
 
 # Configuración del generador de tokens CSRF
