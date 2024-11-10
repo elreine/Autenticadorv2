@@ -9,7 +9,7 @@ from itsdangerous import URLSafeTimedSerializer
 
 # Configuración de Flask, Bcrypt y CORS
 app = Flask(__name__)
-CORS(app, origins=["https://autenticadorv2.onrender.com"])
+CORS(app, origins=["https://autenticadorv2-a3tzip3ks-reinels-projects-b1028227.vercel.app"])  # Cambia esto si tu dominio de Vercel es diferente
 bcrypt = Bcrypt(app)
 
 # Configuración del generador de tokens CSRF
@@ -25,6 +25,11 @@ else:
     cred = credentials.Certificate("backend/firebase_key.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+
+# Ruta de inicio para evitar 404 en la raíz
+@app.route('/')
+def home():
+    return "API de autenticación funcionando"
 
 # Ruta para generar el token CSRF
 @app.route('/csrf-token', methods=['GET'])
