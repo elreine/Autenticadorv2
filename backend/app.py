@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 import re
+import os  # Importar para acceder a variables de entorno
 from itsdangerous import URLSafeTimedSerializer
 
 # Configuración de Flask, Bcrypt y CORS
@@ -12,11 +13,16 @@ CORS(app, origins=["http://localhost:8080"])
 bcrypt = Bcrypt(app)
 
 # Configuración del generador de tokens CSRF
-secret_key = "mi_secreto_unico"  
+secret_key = "mi_secreto_unico"
 csrf_serializer = URLSafeTimedSerializer(secret_key)
 
 # Configuración de Firebase
-cred = credentials.Certificate("firebase_key.json")
+if "RENDER" in os.environ:
+    # Si está en Render, usa la ruta del archivo secreto
+    cred = credentials.Certificate("/etc/secrets/firebase_key.json")
+else:
+    # Si está ejecutándose localmente, usa la ruta local
+    cred = credentials.Certificate("firebase_key.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -67,6 +73,7 @@ def register():
         print("Error en el registro:", e)
         return jsonify({"error": "Hubo un problema en el servidor"}), 500
 
+# Ruta para obtener la lista de usuarios registrados
 @app.route('/users', methods=['GET'])
 def get_users():
     try:
