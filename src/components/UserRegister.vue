@@ -113,13 +113,47 @@ form {
   flex-direction: column;
   max-width: 300px;
   margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
 }
 
-label, input, button {
+label {
+  font-weight: bold;
   margin-top: 10px;
 }
 
+input {
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #9e9e9e;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
 p {
-  color: green;
+  color: #ff6b6b;
+  font-size: 0.9em;
+  margin-top: 5px;
 }
 </style>
