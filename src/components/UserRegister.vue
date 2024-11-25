@@ -9,6 +9,9 @@
       <input type="password" v-model="password" @input="validatePassword" required />
       <p>{{ passwordStrength }}</p>
 
+      <label for="token">Token:</label>
+      <input type="text" v-model="token" required />
+
       <button type="submit" :disabled="!isPasswordValid">Registrar</button>
     </form>
   </div>
@@ -18,24 +21,14 @@
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      passwordStrength: '',
+      username: "",
+      password: "",
+      token: "", // Añadimos un campo para el token
+      passwordStrength: "",
       isPasswordValid: false,
-      csrfToken: '' // Nueva propiedad para almacenar el token CSRF
     };
   },
   methods: {
-    // Método para obtener el token CSRF
-    fetchCsrfToken() {
-      fetch("https://autenticadorv2.onrender.com/csrf-token")
-        .then(response => response.json())
-        .then(data => {
-          this.csrfToken = data.csrf_token;
-        })
-        .catch(error => console.error("Error al obtener el token CSRF:", error));
-    },
-
     validatePassword() {
       const password = this.password;
       const hasUpperCase = /[A-Z]/.test(password);
@@ -71,89 +64,32 @@ export default {
         this.isPasswordValid = false;
       }
     },
-
     register() {
-      // Enviar solicitud POST al backend con el token CSRF
+      // Enviar solicitud POST al backend con el token
       fetch("https://autenticadorv2.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": this.csrfToken // Incluir el token CSRF en el encabezado
+          "X-Auth-Token": this.token, // Incluimos el token
         },
         body: JSON.stringify({
           username: this.username,
-          password: this.password
+          password: this.password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.message) {
+            alert(data.message);
+          } else if (data.error) {
+            alert(data.error);
+          }
         })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message) {
-          alert(data.message);
-        } else if (data.error) {
-          alert(data.error);
-        }
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("Hubo un problema con el registro.");
-      });
-    }
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Hubo un problema con el registro.");
+        });
+    },
   },
-
-  // Llamamos a fetchCsrfToken cuando el componente se monte
-  mounted() {
-    this.fetchCsrfToken();
-  }
 };
 </script>
-
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 300px;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
-}
-
-label {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-input {
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:disabled {
-  background-color: #9e9e9e;
-}
-
-button:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-p {
-  color: #ff6b6b;
-  font-size: 0.9em;
-  margin-top: 5px;
-}
-</style>

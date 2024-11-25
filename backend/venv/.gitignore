@@ -1,0 +1,15 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Archivos sensibles
+backend/firebase_key.json
+.env
+
+# Archivos de entorno virtual de Python
+venv/
+*.pyc
+__pycache__/
+
+# Archivos de logs y datos temporales
+*.log
+*.tmp
+.DS_Store
+node_modules/
