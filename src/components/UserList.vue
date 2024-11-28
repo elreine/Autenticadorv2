@@ -26,12 +26,31 @@ export default {
     };
   },
   mounted() {
-    fetch("https://autenticadorv2.onrender.com/users")
+    const token = localStorage.getItem("sessionToken");
+    if (!token) {
+      alert("Acceso denegado. Por favor, inicia sesión.");
+      this.$router.push("/login");
+      return;
+    }
+
+    fetch("https://autenticadorv2.onrender.com/users", {
+      headers: {
+        "X-Session-Token": token,
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
-        this.users = data.users;
+        if (data.error) {
+          alert(data.error);
+          this.$router.push("/login");
+        } else {
+          this.users = data.users;
+        }
       })
-      .catch((error) => console.error("Error al cargar usuarios:", error));
+      .catch((error) => {
+        console.error("Error al cargar usuarios:", error);
+        alert("Hubo un problema al obtener la lista de usuarios.");
+      });
   },
 };
 </script>

@@ -22,7 +22,13 @@
                 <router-link to="/register" class="nav-link">Registro</router-link>
               </li>
               <li class="nav-item">
+                <router-link to="/login" class="nav-link">Iniciar Sesión</router-link>
+              </li>
+              <li class="nav-item">
                 <router-link to="/users" class="nav-link">Usuarios Registrados</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/generate-token" class="nav-link">Generar Token</router-link>
               </li>
             </ul>
           </div>
@@ -43,6 +49,7 @@
     </footer>
   </div>
 </template>
+
 
 <script>
 export default {

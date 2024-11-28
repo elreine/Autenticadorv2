@@ -1,12 +1,30 @@
-import { createRouter, createWebHistory } from "vue-router";
-import UserRegister from "./components/UserRegister.vue";
-import UserList from "./components/UserList.vue";
-import GenerateToken from "./components/GenerateToken.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import UserRegister from './components/UserRegister.vue';
+import UserLogin from './components/UserLogin.vue'; // Cambiado a UserLogin
+import UserList from './components/UserList.vue';
+import GenerateToken from './components/GenerateToken.vue';
 
 const routes = [
-  { path: "/", component: UserRegister },
-  { path: "/users", component: UserList },
-  { path: "/generate-token", component: GenerateToken }, // Nueva ruta
+  {
+    path: '/register',
+    name: 'Register',
+    component: UserRegister,
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: UserLogin, // Cambiado a UserLogin
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: UserList,
+  },
+  {
+    path: '/generate-token',
+    name: 'GenerateToken',
+    component: GenerateToken,
+  },
 ];
 
 const router = createRouter({
