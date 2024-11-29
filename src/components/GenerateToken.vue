@@ -19,19 +19,20 @@ export default {
   },
   methods: {
     generateToken() {
-      fetch("https://autenticadorv2.onrender.com/generate-token", {
+      fetch("http://127.0.0.1:5000/generate-token", {
         method: "GET",
         headers: {
-          "X-Auth-Key": "mi_clave_segura",
+          "X-Auth-Key": "mi_clave_secreta", // Cambiar a la clave correcta
         },
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.token) {
-            this.token = data.token;
-            localStorage.setItem("registrationToken", data.token); // Guardar el token
+            this.token = data.token; // Guarda el token generado
+            localStorage.setItem("registrationToken", data.token); // Guardar el token en localStorage
+            alert("Token generado con éxito: " + data.token);
           } else if (data.error) {
-            alert(data.error);
+            alert(data.error); // Mostrar errores enviados desde el backend
           }
         })
         .catch((error) => console.error("Error al generar el token:", error));

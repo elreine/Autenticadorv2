@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user, index) in users" :key="user.username">
+        <tr v-for="(user, index) in users" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ user.username }}</td>
         </tr>
@@ -33,7 +33,7 @@ export default {
       return;
     }
 
-    fetch("https://autenticadorv2.onrender.com/users", {
+    fetch("http://127.0.0.1:5000/users", {
       headers: {
         "X-Session-Token": token,
       },

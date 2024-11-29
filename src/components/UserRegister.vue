@@ -31,10 +31,11 @@
           class="form-control"
           id="token"
           v-model="token"
+          placeholder="Ingresa tu token"
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary" :disabled="!isPasswordValid">
+      <button type="submit" class="btn btn-primary" :disabled="!isPasswordValid || !token">
         Registrarse
       </button>
     </form>
@@ -49,10 +50,10 @@
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      token: '',
-      passwordStrength: '',
+      username: "",
+      password: "",
+      token: "", // Token manual ingresado por el usuario
+      passwordStrength: "",
       isPasswordValid: false,
     };
   },
@@ -64,42 +65,45 @@ export default {
       const hasSpecialChar = /[!@#$%^&*()_+\-={}|;:'",.<>?]/.test(password);
       const isLongEnough = password.length >= 8;
 
-      let feedbackMessage = 'La contraseña debe tener al menos:';
+      let feedbackMessage = "La contraseña debe tener al menos:";
       let isPasswordValid = true;
 
       if (!isLongEnough) {
-        feedbackMessage += ' 8 caracteres,';
+        feedbackMessage += " 8 caracteres,";
         isPasswordValid = false;
       }
       if (!hasUpperCase) {
-        feedbackMessage += ' una letra mayúscula,';
+        feedbackMessage += " una letra mayúscula,";
         isPasswordValid = false;
       }
       if (!hasNumber) {
-        feedbackMessage += ' un número,';
+        feedbackMessage += " un número,";
         isPasswordValid = false;
       }
       if (!hasSpecialChar) {
-        feedbackMessage += ' un carácter especial,';
+        feedbackMessage += " un carácter especial,";
         isPasswordValid = false;
       }
 
       if (isPasswordValid) {
-        this.passwordStrength = 'Contraseña segura';
+        this.passwordStrength = "Contraseña segura";
         this.isPasswordValid = true;
       } else {
-        this.passwordStrength = feedbackMessage.slice(0, -1) + '.';
+        this.passwordStrength = feedbackMessage.slice(0, -1) + ".";
         this.isPasswordValid = false;
       }
     },
     register() {
-      const token = localStorage.getItem("registrationToken");
-      fetch("https://autenticadorv2.onrender.com/register", {
+      if (!this.token) {
+        alert("Por favor, genera un token antes de registrarte.");
+        return;
+      }
+
+      fetch("http://127.0.0.1:5000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Auth-Key": "mi_clave_segura",
-          "X-Registration-Token": token, // Enviar el token
+          "X-Registration-Token": this.token, // Enviar el token
         },
         body: JSON.stringify({
           username: this.username,
@@ -110,6 +114,9 @@ export default {
         .then((data) => {
           if (data.message) {
             alert(data.message);
+            this.username = "";
+            this.password = "";
+            this.token = ""; // Limpiar el token
           } else if (data.error) {
             alert(data.error);
           }
@@ -119,7 +126,6 @@ export default {
           alert("Hubo un problema con el registro.");
         });
     },
-
   },
 };
 </script>
