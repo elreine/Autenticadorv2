@@ -9,6 +9,7 @@
           class="form-control"
           id="username"
           v-model="username"
+          placeholder="Ingresa tu usuario"
           required
         />
       </div>
@@ -19,13 +20,20 @@
           class="form-control"
           id="password"
           v-model="password"
+          placeholder="Ingresa tu contraseña"
           required
         />
       </div>
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary w-100 mb-3">
         Iniciar Sesión
       </button>
     </form>
+    <p class="text-center">
+      ¿No tienes cuenta?
+      <router-link to="/register" class="text-primary fw-bold">
+        Regístrate aquí
+      </router-link>
+    </p>
   </div>
 </template>
 
@@ -38,45 +46,50 @@ export default {
     };
   },
   methods: {
-    login() {
-  fetch("http://127.0.0.1:5000/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: this.username,
-      password: this.password,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.token) {
-        localStorage.setItem("sessionToken", data.token);
-        alert("Inicio de sesión exitoso");
-        this.$router.push("/users");
-      } else if (data.error) {
-        alert(data.error);
-      }
-    })
-    .catch((error) => {
-      console.error("Error al iniciar sesión:", error.message);
-      alert("Hubo un problema al iniciar sesión. Verifica tus credenciales.");
-    });
-}
+    async login() {
+      try {
+        const apiUrl = process.env.VUE_APP_API_URL || "http://127.0.0.1:5000";
 
+        const response = await fetch(`${apiUrl}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Error al iniciar sesión");
+        }
+
+        const data = await response.json();
+        if (data.token) {
+          localStorage.setItem("sessionToken", data.token);
+          console.log("Inicio de sesión exitoso. Token:", data.token);
+
+          // Emitir evento global para actualizar la autenticación
+          this.$authEvent.emit("auth-update", true);
+
+          this.$router.push("/users");
+        } else {
+          alert(data.error || "Error desconocido");
+        }
+      } catch (error) {
+        console.error("Error al iniciar sesión:", error.message);
+        alert("Error al iniciar sesión. Verifica tus credenciales.");
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
 .container {
-  max-width: 500px;
+  max-width: 400px;
   margin: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mt-5">
     <h2 class="text-center">Usuarios Registrados</h2>
     <table class="table table-striped mt-4">
       <thead>
@@ -22,35 +22,43 @@
 export default {
   data() {
     return {
-      users: [],
+      users: [], // Lista de usuarios obtenida del backend
     };
   },
-  mounted() {
-    const token = localStorage.getItem("sessionToken");
-    if (!token) {
-      alert("Acceso denegado. Por favor, inicia sesión.");
-      this.$router.push("/login");
-      return;
-    }
+  methods: {
+    async fetchUsers() {
+      const token = localStorage.getItem("sessionToken");
+      if (!token) {
+        alert("Acceso denegado. Por favor, inicia sesión.");
+        this.$router.push("/login");
+        return;
+      }
 
-    fetch("http://127.0.0.1:5000/users", {
-      headers: {
-        "X-Session-Token": token,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          alert(data.error);
-          this.$router.push("/login");
-        } else {
-          this.users = data.users;
+      try {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/users`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Session-Token": token, // Enviar el token para autenticar la solicitud
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Error al obtener usuarios");
         }
-      })
-      .catch((error) => {
-        console.error("Error al cargar usuarios:", error);
-        alert("Hubo un problema al obtener la lista de usuarios.");
-      });
+
+        const data = await response.json();
+        this.users = data.users; // Guardar la lista de usuarios en la data
+      } catch (error) {
+        console.error("Error al cargar usuarios:", error.message);
+        alert("Hubo un problema al obtener la lista de usuarios. " + error.message);
+        this.$router.push("/login");
+      }
+    },
+  },
+  mounted() {
+    this.fetchUsers(); // Cargar usuarios al montar el componente
   },
 };
 </script>

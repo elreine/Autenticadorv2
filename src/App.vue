@@ -1,40 +1,7 @@
 <template>
   <div>
     <!-- Header -->
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-        <div class="container">
-          <a class="navbar-brand" href="#">Autenticador</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <router-link to="/register" class="nav-link">Registro</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/login" class="nav-link">Iniciar Sesión</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/users" class="nav-link">Usuarios Registrados</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/generate-token" class="nav-link">Generar Token</router-link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
+    <NavigationBar />
 
     <!-- Main Content -->
     <main class="container">
@@ -50,15 +17,19 @@
   </div>
 </template>
 
-
 <script>
+import NavigationBar from "./components/NavigationBar.vue";
+
 export default {
   name: "App",
+  components: {
+    NavigationBar,
+  },
 };
 </script>
 
 <style scoped>
-/* Agregar espacio entre el header y el contenido */
+/* Espacio entre el header y el contenido */
 main {
   margin-top: 20px;
 }
