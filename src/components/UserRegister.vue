@@ -24,13 +24,17 @@
           id="password"
           v-model="password"
           @input="validatePassword"
-          placeholder="Debe incluir al menos 8 caracteres, una mayúscula, un número y un símbolo."
+          placeholder="Ingrese la contraseña"
           required
         />
-        <p class="text-muted" :class="{ 'text-success': isPasswordValid, 'text-danger': !isPasswordValid }">
-          {{ passwordStrength }}
-        </p>
       </div>
+      <!-- Mensaje de Validación -->
+      <p
+        class="text-muted mb-3"
+        :class="{ 'text-success': isPasswordValid, 'text-danger': !isPasswordValid }"
+      >
+        {{ passwordStrength }}
+      </p>
 
       <!-- Token -->
       <div class="mb-3">
@@ -154,5 +158,14 @@ export default {
 
 .text-muted {
   font-size: 0.9rem;
+  margin-top: -10px; /* Ajusta el espaciado del mensaje */
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.text-success {
+  color: #198754;
 }
 </style>

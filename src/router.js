@@ -30,9 +30,12 @@ const router = createRouter({
 // Guardas de navegación
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!localStorage.getItem("sessionToken");
+
   if (to.meta.requiresAuth && !isAuthenticated) {
+    // Redirigir a login si la ruta requiere autenticación y no hay token
     next("/login");
   } else if (to.meta.requiresGuest && isAuthenticated) {
+    // Redirigir a usuarios si la ruta es para invitados y hay un token válido
     next("/users");
   } else {
     next();
