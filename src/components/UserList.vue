@@ -35,7 +35,8 @@ export default {
       }
 
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/users`, {
+        const apiUrl = this.$apiUrl; // Usar la URL global configurada en main.js
+        const response = await fetch(`${apiUrl}/users`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

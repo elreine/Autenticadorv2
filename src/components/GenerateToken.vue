@@ -26,32 +26,34 @@ export default {
   },
   methods: {
     async generateToken() {
-      const apiUrl = process.env.VUE_APP_API_URL || "http://127.0.0.1:5000"; // Valor por defecto
-      console.log("API URL utilizada:", apiUrl); // Depuración
+  const apiUrl = this.$apiUrl; // Usar la URL global configurada en main.js
+  console.log("API URL utilizada para /generate-token:", apiUrl); // Log para depuración
 
-      try {
-        const response = await fetch(`${apiUrl}/generate-token`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  try {
+    const response = await fetch(`${apiUrl}/generate-token`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Error desconocido");
-        }
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error desconocido");
+    }
 
-        const data = await response.json();
-        console.log("Token generado:", data.token);
-        this.token = data.token; // Muestra el token generado
-        this.error = null; // Limpia errores previos
-      } catch (error) {
-        console.error("Error en la generación del token:", error.message);
-        this.error = "No se pudo generar el token. Intenta de nuevo.";
-        this.token = null; // Limpia el token si hubo un error
-      }
-    },
+    const data = await response.json();
+    console.log("Token generado:", data.token);
+    this.token = data.token; // Muestra el token generado
+    this.error = null; // Limpia errores previos
+  } catch (error) {
+    console.error("Error en la generación del token:", error.message);
+    this.error = "No se pudo generar el token. Intenta de nuevo.";
+    this.token = null; // Limpia el token si hubo un error
+  }
+}
+
+
   },
 };
 </script>

@@ -1,3 +1,4 @@
+// UserRegister.vue
 <template>
   <div class="container mt-5">
     <h2 class="text-center">Registro</h2>
@@ -118,7 +119,7 @@ export default {
     },
 
     async register() {
-      const apiUrl = process.env.VUE_APP_API_URL || "http://127.0.0.1:5000";
+      const apiUrl = this.$apiUrl; // Usar URL global configurada en main.js
 
       try {
         const response = await fetch(`${apiUrl}/register`, {

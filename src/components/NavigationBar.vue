@@ -52,7 +52,7 @@ export default {
       }
 
       try {
-        const apiUrl = process.env.VUE_APP_API_URL || "http://127.0.0.1:5000";
+        const apiUrl = this.$apiUrl || "http://127.0.0.1:5000";
         const response = await fetch(`${apiUrl}/validate-token`, {
           method: "POST",
           headers: {

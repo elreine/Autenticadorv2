@@ -22,7 +22,7 @@
     },
     methods: {
       async generateToken() {
-        const apiUrl = process.env.VUE_APP_API_URL || "http://127.0.0.1:5000";
+        const apiUrl = this.$apiUrl || "http://127.0.0.1:5000";
         try {
           const response = await fetch(`${apiUrl}/generate-token`, {
             method: "GET",
