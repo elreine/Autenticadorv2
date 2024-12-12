@@ -193,4 +193,10 @@ def handle_exception(e):
 if __name__ == '__main__':
     print(f"Entorno actual: {env}")
     print(f"Allowed Origins: {allowed_origins}")
-    socketio.run(app, host='127.0.0.1', port=5000, debug=(env == "development"))
+
+    # Configurar host y modo de depuración según el entorno
+    host = '127.0.0.1' if env == 'development' else '0.0.0.0'
+    debug = (env == 'development')
+
+    # Ejecutar la aplicación
+    app.run(host=host, port=5000, debug=debug)
