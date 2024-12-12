@@ -23,16 +23,18 @@ env = os.getenv("ENV", "development")
 
 # Configuración de Firebase
 try:
-    firebase_key_json = os.getenv("FIREBASE_KEY")
-    if firebase_key_json:
-        # Cargar credenciales desde variable de entorno (Render)
-        cred = credentials.Certificate(json.loads(firebase_key_json))
-        print("Firebase configurado desde variable de entorno")
+    if env == "production":
+        # En producción, cargar desde el archivo secreto en Render
+        print("Intentando cargar Firebase desde archivo secreto en Render...")
+        firebase_key_path = "/etc/secrets/firebase_key.json"
+        cred = credentials.Certificate(firebase_key_path)
+        print("Firebase configurado correctamente desde archivo secreto")
     else:
-        # Cargar credenciales desde archivo local (Desarrollo local)
+        # En desarrollo, cargar desde el archivo local
+        print("Intentando cargar Firebase desde archivo local...")
         firebase_key_path = os.getenv("FIREBASE_KEY_PATH", "backend/firebase_key.json")
         cred = credentials.Certificate(firebase_key_path)
-        print("Firebase configurado desde archivo local")
+        print("Firebase configurado correctamente desde archivo local")
 
     firebase_admin.initialize_app(cred)
     db = firestore.client()
