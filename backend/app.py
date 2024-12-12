@@ -9,6 +9,7 @@ import secrets
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 import re
+import json
 
 # Cargar variables desde el archivo .env del backend si no están ya definidas
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -17,13 +18,22 @@ if os.path.exists(dotenv_path):
 
 # Variables de entorno
 secret_key = os.getenv("SECRET_KEY", "clave_defecto")
-firebase_key_path = os.getenv("FIREBASE_KEY_PATH", "backend/firebase_key.json")
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 env = os.getenv("ENV", "development")
 
 # Configuración de Firebase
 try:
-    cred = credentials.Certificate(firebase_key_path)
+    firebase_key_json = os.getenv("FIREBASE_KEY")
+    if firebase_key_json:
+        # Cargar credenciales desde variable de entorno (Render)
+        cred = credentials.Certificate(json.loads(firebase_key_json))
+        print("Firebase configurado desde variable de entorno")
+    else:
+        # Cargar credenciales desde archivo local (Desarrollo local)
+        firebase_key_path = os.getenv("FIREBASE_KEY_PATH", "backend/firebase_key.json")
+        cred = credentials.Certificate(firebase_key_path)
+        print("Firebase configurado desde archivo local")
+
     firebase_admin.initialize_app(cred)
     db = firestore.client()
     print("Firebase conectado correctamente")
@@ -136,7 +146,7 @@ def login():
         user_ref = db.collection('users').document(username)
         user_doc = user_ref.get()
 
-        if not user_doc.exists:  # Ajustado: Cambiado de exists() a exists
+        if not user_doc.exists:
             print("Error: Usuario no encontrado")
             return jsonify({"error": "Credenciales inválidas"}), 403
 
@@ -187,7 +197,7 @@ def get_users():
 @app.errorhandler(Exception)
 def handle_exception(e):
     """Manejo global de errores"""
-    print(f"Error inesperado: {e}")  # Registrar detalles en consola
+    print(f"Error inesperado: {e}")
     return jsonify({"error": "Ocurrió un error interno. Consulte al administrador del sistema."}), 500
 
 if __name__ == '__main__':
