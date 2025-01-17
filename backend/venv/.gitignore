@@ -1,6 +1,7 @@
 # Created by venv; see https://docs.python.org/3/library/venv.html
 # Archivos sensibles
 backend/firebase_key.json
+backend/.env
 .env
 
 # Archivos de entorno virtual de Python

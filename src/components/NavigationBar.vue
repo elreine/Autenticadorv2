@@ -1,7 +1,8 @@
+// src/components/NavigationBar.vue
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-      <router-link class="navbar-brand fw-bold" to="/">Autenticador</router-link>
+      <router-link class="navbar-brand fw-bold" to="/home">Inicio</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -24,6 +25,9 @@
           </li>
 
           <!-- Botones para usuarios autenticados -->
+          <li class="nav-item" v-if="isAuthenticated">
+            <router-link class="nav-link text-white" to="/home">Inicio</router-link>
+          </li>
           <li class="nav-item" v-if="isAuthenticated">
             <router-link class="nav-link text-white" to="/users">Usuarios</router-link>
           </li>

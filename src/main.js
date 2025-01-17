@@ -1,4 +1,3 @@
-// main.js (ajustado para consistencia en la URL de la API)
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
