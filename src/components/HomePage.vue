@@ -1,4 +1,3 @@
-// src/components/HomePage.vue
 <template>
   <div class="container mt-5">
     <h2 class="text-center">Bienvenido, {{ username }}</h2>
@@ -10,15 +9,15 @@
 export default {
   data() {
     return {
-      username: "",
+      username: "", // Nombre del usuario
     };
   },
   mounted() {
-    // Obtener nombre del usuario desde el token o API
+    // Obtener el nombre del usuario desde el token almacenado
     const token = localStorage.getItem("sessionToken");
     if (token) {
       try {
-        // Decodificar token para obtener información del usuario (ejemplo)
+        // Decodificar token (ejemplo usando formato JWT)
         const payload = JSON.parse(atob(token.split(".")[1]));
         this.username = payload.username || "Usuario";
       } catch (error) {
@@ -34,5 +33,6 @@ export default {
 .container {
   max-width: 600px;
   margin: auto;
+  text-align: center;
 }
 </style>

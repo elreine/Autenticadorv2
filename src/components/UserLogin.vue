@@ -46,43 +46,43 @@ export default {
     };
   },
   methods: {
-  async login() {
-    try {
-      const apiUrl = this.$apiUrl || "http://127.0.0.1:5000";
+    async login() {
+      try {
+        const apiUrl = this.$apiUrl || "http://127.0.0.1:5000";
 
-      const response = await fetch(`${apiUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      });
+        const response = await fetch(`${apiUrl}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error("No se pudo iniciar sesión. Verifique las credenciales.");
+        if (!response.ok) {
+          throw new Error("No se pudo iniciar sesión. Verifique las credenciales.");
+        }
+
+        const data = await response.json();
+        if (data.token) {
+          localStorage.setItem("sessionToken", data.token);
+          console.log("Inicio de sesión exitoso. Token:", data.token);
+
+          // Emitir evento global para actualizar la autenticación
+          this.$authEvent.emit("auth-update", true);
+
+          // Redirigir al usuario a la nueva página de inicio
+          this.$router.push("/home");
+        } else {
+          alert(data.error || "Error desconocido");
+        }
+      } catch (error) {
+        console.error("Error al iniciar sesión:", error.message);
+        alert("No se pudo iniciar sesión. Por favor, inténtelo más tarde.");
       }
-
-      const data = await response.json();
-      if (data.token) {
-        localStorage.setItem("sessionToken", data.token);
-        console.log("Inicio de sesión exitoso. Token:", data.token);
-
-        // Emitir evento global para actualizar la autenticación
-        this.$authEvent.emit("auth-update", true);
-
-        this.$router.push("/users");
-      } else {
-        alert(data.error || "Error desconocido");
-      }
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error.message);
-      alert("No se pudo iniciar sesión. Por favor, inténtelo más tarde.");
-    }
-  },
-
+    },
   },
 };
 </script>

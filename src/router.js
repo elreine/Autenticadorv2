@@ -1,4 +1,3 @@
-// src/router.js
 import { createRouter, createWebHistory } from "vue-router";
 import UserLogin from "./components/UserLogin.vue";
 import UserRegister from "./components/UserRegister.vue";
@@ -43,7 +42,7 @@ router.beforeEach((to, from, next) => {
     // Redirigir a login si la ruta requiere autenticación y no hay token
     next("/login");
   } else if (to.meta.requiresGuest && isAuthenticated) {
-    // Redirigir a la página de inicio si la ruta es para invitados y hay un token válido
+    // Redirigir a la página principal si la ruta es para invitados y hay un token válido
     next("/home");
   } else {
     next();
